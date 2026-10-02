@@ -40,12 +40,19 @@ public class Main {
             System.out.println("10. Exit");
             System.out.print("Select an option: ");
 
-            String input = scanner.nextLine();
+            if (!scanner.hasNextLine()) {
+                break;
+            }
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                continue;
+            }
+            
             int choice = -1;
             try {
-                choice = Integer.parseInt(input.trim());
+                choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("Invalid input. Please enter a number between 1 and 10.");
                 continue;
             }
 
