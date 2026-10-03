@@ -11,19 +11,24 @@ import finserve.m3_dp.DamerauLevenshtein;
 import finserve.m3_dp.Levenshtein;
 import finserve.m3_dp.MatrixChain;
 import finserve.m3_dp.WeightedEditDistance;
+import finserve.model.Account;
 import finserve.model.Transaction;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
     private static List<Transaction> transactions = new ArrayList<>();
+    private static Map<String, Account> accounts = new HashMap<>();
+    private static Map<String, String> accountTransactions = new HashMap<>();
 
     public static void main(String[] args) {
-        // Load dataset
+        // Load transactions dataset
         try {
             Scanner fileScanner = new Scanner(new File("data/transactions.csv"));
             if (fileScanner.hasNextLine()) fileScanner.nextLine(); // Skip header
@@ -36,7 +41,31 @@ public class Main {
             }
             fileScanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Warning: Dataset not found at 'data/transactions.csv'. Operating with empty dataset.");
+            System.out.println("Warning: Dataset not found at 'data/transactions.csv'.");
+        }
+
+        // Load accounts dataset
+        try {
+            Scanner accScanner = new Scanner(new File("data/accounts.csv"));
+            if (accScanner.hasNextLine()) accScanner.nextLine(); // Skip header
+            while (accScanner.hasNextLine()) {
+                String line = accScanner.nextLine();
+                String[] parts = line.split(",", 4);
+                if (parts.length == 4) {
+                    String accId = parts[0].trim();
+                    String custId = parts[1].trim();
+                    double bal = Double.parseDouble(parts[2].trim());
+                    String txHistory = parts[3].trim();
+                    
+                    accounts.put(accId, new Account(accId, custId, bal));
+                    accountTransactions.put(accId, txHistory);
+                }
+            }
+            accScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Warning: Dataset not found at 'data/accounts.csv'.");
+        } catch (Exception ex) {
+            System.out.println("Warning: Data format error in accounts.csv");
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -78,7 +107,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Customer & Account Management module is a placeholder.");
+                    accountManagementMenu(scanner);
                     break;
                 case 2:
                     transactionSearchMenu(scanner);
@@ -120,6 +149,24 @@ public class Main {
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
+        }
+    }
+
+    private static void accountManagementMenu(Scanner scanner) {
+        System.out.println("\n--- Account Management (O(1) Data Retrieval) ---");
+        System.out.println("Available Accounts in DB: " + accounts.keySet());
+        System.out.print("Enter Account Number (e.g., 101): ");
+        String accNo = scanner.nextLine().trim();
+        
+        if (accounts.containsKey(accNo)) {
+            Account acc = accounts.get(accNo);
+            System.out.println("\n[Account Details Found]");
+            System.out.println("Account ID: " + acc.getAccountId());
+            System.out.println("Customer ID: " + acc.getCustomerId());
+            System.out.println("Current Balance: $" + String.format("%.2f", acc.getBalance()));
+            System.out.println("Transaction History: " + accountTransactions.get(accNo));
+        } else {
+            System.out.println("Error: Account " + accNo + " not found in the database.");
         }
     }
 
@@ -180,7 +227,6 @@ public class Main {
         String pattern = scanner.nextLine();
         boolean found = false;
         for (Transaction tx : transactions) {
-            // Using M2 Suffix Array Search
             List<Integer> matches = SuffixArray.search(tx.getDescription(), pattern);
             if (matches != null && !matches.isEmpty()) {
                 System.out.println(tx.getId() + " -> " + tx.getDescription() + " (Found via Suffix Array)");
