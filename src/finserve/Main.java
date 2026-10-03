@@ -4,6 +4,8 @@ import finserve.m1_string.AhoCorasick;
 import finserve.m1_string.KMP;
 import finserve.m1_string.RabinKarp;
 import finserve.m1_string.ZFunction;
+import finserve.m2_suffix.LCP;
+import finserve.m2_suffix.SuffixArray;
 import finserve.m3_dp.BitmaskDP;
 import finserve.m3_dp.DamerauLevenshtein;
 import finserve.m3_dp.Levenshtein;
@@ -11,6 +13,8 @@ import finserve.m3_dp.MatrixChain;
 import finserve.m3_dp.WeightedEditDistance;
 import finserve.model.Transaction;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -19,16 +23,21 @@ public class Main {
     private static List<Transaction> transactions = new ArrayList<>();
 
     public static void main(String[] args) {
-        // Initialize dummy data based on user requirements
-        transactions.add(new Transaction("TX1001", "ONLINE PAYMENT AMAZON"));
-        transactions.add(new Transaction("TX1002", "ONLINE PAYMENT FLIPKART"));
-        transactions.add(new Transaction("TX1003", "ATM CASH WITHDRAWAL"));
-        transactions.add(new Transaction("TX1004", "ONLINE PAYMENT AMAZON"));
-        transactions.add(new Transaction("TX1005", "INTERNATIONAL PAYMENT"));
-        transactions.add(new Transaction("TX2034", "PHISHING DETECTED IN LOGIN"));
-        transactions.add(new Transaction("TX2041", "UNAUTHORIZED TRANSFER TO UNKNOWN ACCOUNT"));
-        transactions.add(new Transaction("TX2050", "OTP SENT TO MOBILE"));
-        transactions.add(new Transaction("TX2099", "SUSPICIOUS LOGIN ATTEMPT"));
+        // Load dataset
+        try {
+            Scanner fileScanner = new Scanner(new File("data/transactions.csv"));
+            if (fileScanner.hasNextLine()) fileScanner.nextLine(); // Skip header
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(",", 2);
+                if (parts.length == 2) {
+                    transactions.add(new Transaction(parts[0].trim(), parts[1].trim()));
+                }
+            }
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Warning: Dataset not found at 'data/transactions.csv'. Operating with empty dataset.");
+        }
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -44,7 +53,7 @@ public class Main {
             System.out.println("5. Search Financial Codes (Rabin-Karp)");
             System.out.println("--- Module 2: Suffix Structures ---");
             System.out.println("6. Financial Document Search & Indexing (Suffix Array / SA-IS)");
-            System.out.println("7. Transaction Pattern Analysis (LCP / Suffix Tree)");
+            System.out.println("7. Transaction Pattern Analysis (LCP)");
             System.out.println("--- Module 3: Advanced Dynamic Programming ---");
             System.out.println("8. Transaction Description Correction (Levenshtein)");
             System.out.println("9. Fast Typo Error Handling (Damerau-Levenshtein)");
@@ -84,8 +93,10 @@ public class Main {
                     rabinKarpMenu(scanner);
                     break;
                 case 6:
+                    suffixArrayMenu(scanner);
+                    break;
                 case 7:
-                    System.out.println("Module 2 (Suffix Structures) called! Make sure the classes are pulled from Git.");
+                    lcpMenu();
                     break;
                 case 8:
                     levenshteinMenu(scanner);
@@ -161,6 +172,38 @@ public class Main {
             if (!matches.isEmpty()) {
                 System.out.println(tx.getId() + " -> Code found at: " + matches);
             }
+        }
+    }
+
+    private static void suffixArrayMenu(Scanner scanner) {
+        System.out.print("Enter keyword for advanced index search: ");
+        String pattern = scanner.nextLine();
+        boolean found = false;
+        for (Transaction tx : transactions) {
+            // Using M2 Suffix Array Search
+            List<Integer> matches = SuffixArray.search(tx.getDescription(), pattern);
+            if (matches != null && !matches.isEmpty()) {
+                System.out.println(tx.getId() + " -> " + tx.getDescription() + " (Found via Suffix Array)");
+                found = true;
+            }
+        }
+        if (!found) System.out.println("No matching transactions found.");
+    }
+
+    private static void lcpMenu() {
+        System.out.println("Finding the Longest Repeated Pattern across all transactions...");
+        StringBuilder combined = new StringBuilder();
+        for (Transaction tx : transactions) {
+            combined.append(tx.getDescription()).append("#");
+        }
+        String text = combined.toString();
+        int[] sa = SuffixArray.buildSuffixArray(text);
+        int[] lcp = LCP.buildLCP(text, sa);
+        String lrs = LCP.findLongestRepeatedSubstring(text, sa, lcp);
+        if (lrs != null && !lrs.isEmpty()) {
+            System.out.println("Longest Repeated Pattern found: '" + lrs + "'");
+        } else {
+            System.out.println("No significant repeated patterns found.");
         }
     }
 
