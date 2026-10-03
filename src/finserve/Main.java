@@ -2,6 +2,7 @@ package finserve;
 
 import finserve.m1_string.AhoCorasick;
 import finserve.m1_string.KMP;
+import finserve.m1_string.NaiveSearch;
 import finserve.m1_string.RabinKarp;
 import finserve.m1_string.ZFunction;
 import finserve.m2_suffix.LCP;
@@ -53,11 +54,12 @@ public class Main {
                 String[] parts = line.split(",", 4);
                 if (parts.length == 4) {
                     String accId = parts[0].trim();
-                    String custId = parts[1].trim();
+                    String name = parts[1].trim();
                     double bal = Double.parseDouble(parts[2].trim());
                     String txHistory = parts[3].trim();
                     
-                    accounts.put(accId, new Account(accId, custId, bal));
+                    // Reusing customerId field in Account to store the Name
+                    accounts.put(accId, new Account(accId, name, bal));
                     accountTransactions.put(accId, txHistory);
                 }
             }
@@ -74,22 +76,23 @@ public class Main {
             System.out.println("FINSERVE BANKING ANALYTICS - MAIN MENU");
             System.out.println("============================================================");
             System.out.println("--- General Data ---");
-            System.out.println("1. Customer & Account Management");
+            System.out.println("1. Customer & Account Management (O(1) Search)");
             System.out.println("--- Module 1: String Algorithms ---");
-            System.out.println("2. Transaction Search (KMP)");
-            System.out.println("3. Fraud Pattern Detection (Aho-Corasick)");
-            System.out.println("4. Repeated Transaction Pattern (Z-Function)");
-            System.out.println("5. Search Financial Codes (Rabin-Karp)");
+            System.out.println("2. Customer Name Search (Naive)");
+            System.out.println("3. Transaction Search (KMP)");
+            System.out.println("4. Fraud Pattern Detection (Aho-Corasick)");
+            System.out.println("5. Repeated Transaction Pattern (Z-Function)");
+            System.out.println("6. Search Financial Codes (Rabin-Karp)");
             System.out.println("--- Module 2: Suffix Structures ---");
-            System.out.println("6. Financial Document Search & Indexing (Suffix Array / SA-IS)");
-            System.out.println("7. Transaction Pattern Analysis (LCP)");
+            System.out.println("7. Financial Document Search & Indexing (Suffix Array / SA-IS)");
+            System.out.println("8. Transaction Pattern Analysis (LCP)");
             System.out.println("--- Module 3: Advanced Dynamic Programming ---");
-            System.out.println("8. Transaction Description Correction (Levenshtein)");
-            System.out.println("9. Fast Typo Error Handling (Damerau-Levenshtein)");
-            System.out.println("10. Severity-Based Error Detection (Weighted Edit Distance)");
-            System.out.println("11. Financial Operation Route Optimization (Bitmask DP)");
-            System.out.println("12. Batch Processing Sequence Optimization (Matrix Chain)");
-            System.out.println("13. Exit");
+            System.out.println("9. Transaction Description Correction (Levenshtein)");
+            System.out.println("10. Fast Typo Error Handling (Damerau-Levenshtein)");
+            System.out.println("11. Severity-Based Error Detection (Weighted Edit Distance)");
+            System.out.println("12. Financial Operation Route Optimization (Bitmask DP)");
+            System.out.println("13. Batch Processing Sequence Optimization (Matrix Chain)");
+            System.out.println("14. Exit");
             System.out.println("============================================================");
             System.out.print("Select an option: ");
 
@@ -110,39 +113,42 @@ public class Main {
                     accountManagementMenu(scanner);
                     break;
                 case 2:
-                    transactionSearchMenu(scanner);
+                    naiveNameSearchMenu(scanner);
                     break;
                 case 3:
-                    fraudPatternDetectionMenu();
+                    transactionSearchMenu(scanner);
                     break;
                 case 4:
-                    zFunctionMenu(scanner);
+                    fraudPatternDetectionMenu();
                     break;
                 case 5:
-                    rabinKarpMenu(scanner);
+                    zFunctionMenu(scanner);
                     break;
                 case 6:
-                    suffixArrayMenu(scanner);
+                    rabinKarpMenu(scanner);
                     break;
                 case 7:
-                    lcpMenu();
+                    suffixArrayMenu(scanner);
                     break;
                 case 8:
-                    levenshteinMenu(scanner);
+                    lcpMenu();
                     break;
                 case 9:
-                    damerauLevenshteinMenu(scanner);
+                    levenshteinMenu(scanner);
                     break;
                 case 10:
-                    weightedEditDistanceMenu(scanner);
+                    damerauLevenshteinMenu(scanner);
                     break;
                 case 11:
-                    bitmaskDPMenu();
+                    weightedEditDistanceMenu(scanner);
                     break;
                 case 12:
-                    matrixChainMenu();
+                    bitmaskDPMenu();
                     break;
                 case 13:
+                    matrixChainMenu();
+                    break;
+                case 14:
                     System.out.println("Exiting FinServe Analytics. Goodbye!");
                     scanner.close();
                     return;
@@ -162,12 +168,28 @@ public class Main {
             Account acc = accounts.get(accNo);
             System.out.println("\n[Account Details Found]");
             System.out.println("Account ID: " + acc.getAccountId());
-            System.out.println("Customer ID: " + acc.getCustomerId());
+            System.out.println("Customer Name: " + acc.getCustomerId());
             System.out.println("Current Balance: $" + String.format("%.2f", acc.getBalance()));
             System.out.println("Transaction History: " + accountTransactions.get(accNo));
         } else {
             System.out.println("Error: Account " + accNo + " not found in the database.");
         }
+    }
+
+    private static void naiveNameSearchMenu(Scanner scanner) {
+        System.out.print("Enter partial or full Customer Name to search (e.g., 'Alice'): ");
+        String pattern = scanner.nextLine();
+        System.out.println("Searching across database using Naive algorithm...");
+        boolean found = false;
+        
+        for (Account acc : accounts.values()) {
+            String name = acc.getCustomerId(); // Customer Name is stored here
+            if (!NaiveSearch.search(name, pattern).isEmpty()) {
+                System.out.println("Match found -> Acc: " + acc.getAccountId() + " | Name: " + name);
+                found = true;
+            }
+        }
+        if (!found) System.out.println("No customer found with that name pattern.");
     }
 
     private static void transactionSearchMenu(Scanner scanner) {
