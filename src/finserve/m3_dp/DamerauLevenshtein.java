@@ -1,6 +1,7 @@
 package finserve.m3_dp;
 
 public class DamerauLevenshtein {
+    //Fast Data-Entry Error Handling
     // DP algorithm for Damerau-Levenshtein distance (includes transpositions)
     // Time complexity: O(m * n)
     // Space complexity: O(m * n)

@@ -1,6 +1,7 @@
 package finserve.m3_dp;
 
 public class MatrixChain {
+    //Batch Processing Optimization
     // DP algorithm for Matrix Chain Multiplication
     // Time complexity: O(n^3)
     // Space complexity: O(n^2)
