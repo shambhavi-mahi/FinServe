@@ -58,7 +58,6 @@ public class Main {
                     double bal = Double.parseDouble(parts[2].trim());
                     String txHistory = parts[3].trim();
                     
-                    // Reusing customerId field in Account to store the Name
                     accounts.put(accId, new Account(accId, name, bal));
                     accountTransactions.put(accId, txHistory);
                 }
@@ -184,7 +183,7 @@ public class Main {
         
         for (Account acc : accounts.values()) {
             String name = acc.getCustomerId(); // Customer Name is stored here
-            if (!NaiveSearch.search(name, pattern).isEmpty()) {
+            if (!NaiveSearch.search(name.toUpperCase(), pattern.toUpperCase()).isEmpty()) {
                 System.out.println("Match found -> Acc: " + acc.getAccountId() + " | Name: " + name);
                 found = true;
             }
@@ -198,7 +197,7 @@ public class Main {
         System.out.println("Searching for: '" + pattern + "'...");
         boolean found = false;
         for (Transaction tx : transactions) {
-            if (!KMP.search(tx.getDescription(), pattern).isEmpty()) {
+            if (!KMP.search(tx.getDescription().toUpperCase(), pattern.toUpperCase()).isEmpty()) {
                 System.out.println(tx);
                 found = true;
             }
@@ -213,7 +212,8 @@ public class Main {
         ac.build(fraudPatterns);
         boolean foundFraud = false;
         for (Transaction tx : transactions) {
-            List<String> matches = ac.search(tx.getDescription());
+            // Using toUpperCase to ensure case-insensitive matching
+            List<String> matches = ac.search(tx.getDescription().toUpperCase());
             if (!matches.isEmpty()) {
                 System.out.println(tx.getId() + " -> " + String.join(", ", matches) + " detected");
                 foundFraud = true;
@@ -226,7 +226,7 @@ public class Main {
         System.out.print("Enter transaction pattern to find repetition (e.g., 'AMAZON'): ");
         String pattern = scanner.nextLine();
         for (Transaction tx : transactions) {
-            List<Integer> matches = ZFunction.search(tx.getDescription(), pattern);
+            List<Integer> matches = ZFunction.search(tx.getDescription().toUpperCase(), pattern.toUpperCase());
             if (!matches.isEmpty()) {
                 System.out.println(tx.getId() + " -> Match at index: " + matches);
             }
@@ -237,7 +237,7 @@ public class Main {
         System.out.print("Enter financial code/keyword to search: ");
         String pattern = scanner.nextLine();
         for (Transaction tx : transactions) {
-            List<Integer> matches = RabinKarp.search(tx.getDescription(), pattern);
+            List<Integer> matches = RabinKarp.search(tx.getDescription().toUpperCase(), pattern.toUpperCase());
             if (!matches.isEmpty()) {
                 System.out.println(tx.getId() + " -> Code found at: " + matches);
             }
@@ -249,8 +249,8 @@ public class Main {
         String pattern = scanner.nextLine();
         boolean found = false;
         for (Transaction tx : transactions) {
-            List<Integer> matches = SuffixArray.search(tx.getDescription(), pattern);
-            if (matches != null && !matches.isEmpty()) {
+            List<Integer> matches = SuffixArray.search(tx.getDescription().toUpperCase(), pattern.toUpperCase());
+            if (!matches.isEmpty()) {
                 System.out.println(tx.getId() + " -> " + tx.getDescription() + " (Found via Suffix Array)");
                 found = true;
             }
@@ -262,7 +262,7 @@ public class Main {
         System.out.println("Finding the Longest Repeated Pattern across all transactions...");
         StringBuilder combined = new StringBuilder();
         for (Transaction tx : transactions) {
-            combined.append(tx.getDescription()).append("#");
+            combined.append(tx.getDescription().toUpperCase()).append("#");
         }
         String text = combined.toString();
         int[] sa = SuffixArray.buildSuffixArray(text);
@@ -280,7 +280,7 @@ public class Main {
         String input = scanner.nextLine();
         System.out.print("Enter expected description (e.g., AMAZON PAYMENT): ");
         String expected = scanner.nextLine();
-        int dist = Levenshtein.calculate(input, expected);
+        int dist = Levenshtein.calculate(input.toUpperCase(), expected.toUpperCase());
         System.out.println("Levenshtein Distance: " + dist);
         System.out.println(dist < 3 ? "Recommendation: AUTOCORRECT" : "Recommendation: MANUAL REVIEW");
     }
@@ -290,7 +290,7 @@ public class Main {
         String input = scanner.nextLine();
         System.out.print("Enter expected description (e.g., AMAZON PAYMENT): ");
         String expected = scanner.nextLine();
-        int dist = DamerauLevenshtein.calculate(input, expected);
+        int dist = DamerauLevenshtein.calculate(input.toUpperCase(), expected.toUpperCase());
         System.out.println("Damerau-Levenshtein Distance (handles swaps): " + dist);
     }
 
@@ -299,7 +299,7 @@ public class Main {
         String input = scanner.nextLine();
         System.out.print("Enter expected code (e.g., 100): ");
         String expected = scanner.nextLine();
-        int dist = WeightedEditDistance.calculateWeighted(input, expected);
+        int dist = WeightedEditDistance.calculateWeighted(input.toUpperCase(), expected.toUpperCase());
         System.out.println("Weighted Edit Distance (Penalty Score): " + dist);
     }
 
