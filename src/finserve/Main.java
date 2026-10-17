@@ -12,6 +12,11 @@ import finserve.m3_dp.DamerauLevenshtein;
 import finserve.m3_dp.Levenshtein;
 import finserve.m3_dp.MatrixChain;
 import finserve.m3_dp.WeightedEditDistance;
+import finserve.m4_network_flow.BipartiteMatchingAssignment;
+import finserve.m4_network_flow.DinicMaxFlow;
+import finserve.m4_network_flow.FintechProjectSelection;
+import finserve.m4_network_flow.InterbankMaxFlow;
+import finserve.m4_network_flow.MinCostPaymentRouting;
 import finserve.m5_np_approx.KnapsackCapitalBudgeting;
 import finserve.m5_np_approx.MetricTSPApprox;
 import finserve.m5_np_approx.ReconciliationSubsetSum;
@@ -28,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -122,35 +128,16 @@ public class Main {
             System.out.println("\n================================================================================");
             System.out.println("              FINSERVE - INTELLIGENT BANKING ANALYTICS PLATFORM");
             System.out.println("================================================================================");
-            System.out.println("--- General Data & Account Management ---");
-            System.out.println(" 1. View Account Details & Transactions (O(1) Search) [with limit]");
-            System.out.println("--- Module 1: String Algorithms ---");
-            System.out.println(" 2. Customer Name Search (Naive) [with limit]");
-            System.out.println(" 3. Transaction Search (KMP) [with limit]");
-            System.out.println(" 4. Fraud Pattern Detection (Aho-Corasick) [with limit]");
-            System.out.println(" 5. Repeated Transaction Pattern (Z-Function) [with limit]");
-            System.out.println(" 6. Search Financial Codes (Rabin-Karp) [with limit]");
-            System.out.println("--- Module 2: Suffix Structures ---");
-            System.out.println(" 7. Financial Document Search & Indexing (Suffix Array / SA-IS) [with limit]");
-            System.out.println(" 8. Transaction Pattern Analysis (LCP) [Analysis Scope Limit]");
-            System.out.println("--- Module 3: Advanced Dynamic Programming ---");
-            System.out.println(" 9. KYC & AML Sanctions Screening (Levenshtein)");
-            System.out.println("10. IBAN & Account Number Transposition Detection (Damerau-Levenshtein)");
-            System.out.println("11. Merchant Entity Resolution (Weighted Edit Distance)");
-            System.out.println("12. ATM Cash Replenishment Routing (Bitmask DP - Small N)");
-            System.out.println("13. Optimal Multi-Currency Conversion Cost (Matrix Chain Multiplication)");
-            System.out.println("14. Fraud Ring Surveillance (Vertex Cover 2-Approx & FPT) [with Checklist]");
-            System.out.println("15. Loan Capital Budgeting (Knapsack: Exact DP vs Greedy 2-Approx vs FPTAS)");
-            System.out.println("16. Interbank Clearing Discrepancy Reconciliation (Subset-Sum & Witness Verification)");
-            System.out.println("17. Metropolitan ATM Cash Logistics (Metric-TSP 2-Approximation via MST)");
-            System.out.println("18. RSA / SWIFT Cryptographic Key Primality (Miller-Rabin Monte Carlo Test)");
-            System.out.println("19. Streaming Transaction Compliance Audit (Reservoir Sampling Algorithm R) [with limit]");
-            System.out.println("20. Anti-Collision Transaction Deduplication (Universal Hashing Las Vegas vs Modulo)");
-            System.out.println("21. High-Volume Transaction Log Sorting (Randomized QuickSort) [Analysis Scope Limit]");
-            System.out.println("22. Parallel Multi-Core Ledger Analytics & Running Balance Scan (ForkJoin & Blelloch Scan) [Analysis Scope Limit]");
-            System.out.println("23. Exit");
+            System.out.println(" 1. Customer Account Details & Transactions (O(1) Search) [with limit]");
+            System.out.println(" 2. Module 1: String Algorithms & Fraud Pattern Detection");
+            System.out.println(" 3. Module 2: Suffix Structures & Financial Document Indexing");
+            System.out.println(" 4. Module 3: Advanced Dynamic Programming & Financial Optimizations");
+            System.out.println(" 5. Module 4: Network Flow & Interbank Liquidity Clearing");
+            System.out.println(" 6. Module 5: NP-Completeness, Reductions & Approximation");
+            System.out.println(" 7. Module 6: Randomised and Parallel Algorithms");
+            System.out.println(" 8. Exit");
             System.out.println("================================================================================");
-            System.out.print("Select an option (1-23): ");
+            System.out.print("Select an option (1-8): ");
 
             if (!scanner.hasNextLine()) break;
             String input = scanner.nextLine().trim();
@@ -160,7 +147,7 @@ public class Main {
             try {
                 choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("Invalid input. Please enter a number (1-8).");
                 continue;
             }
 
@@ -169,74 +156,301 @@ public class Main {
                     accountManagementMenu(scanner);
                     break;
                 case 2:
-                    naiveNameSearchMenu(scanner);
+                    module1SubMenu(scanner);
                     break;
                 case 3:
-                    transactionSearchMenu(scanner);
+                    module2SubMenu(scanner);
                     break;
                 case 4:
-                    fraudPatternDetectionMenu(scanner);
+                    module3SubMenu(scanner);
                     break;
                 case 5:
-                    zFunctionMenu(scanner);
+                    module4SubMenu(scanner);
                     break;
                 case 6:
-                    rabinKarpMenu(scanner);
+                    module5SubMenu(scanner);
                     break;
                 case 7:
-                    suffixArrayMenu(scanner);
+                    module6SubMenu(scanner);
                     break;
                 case 8:
-                    lcpMenu(scanner);
-                    break;
-                case 9:
-                    levenshteinMenu(scanner);
-                    break;
-                case 10:
-                    damerauLevenshteinMenu(scanner);
-                    break;
-                case 11:
-                    weightedEditDistanceMenu(scanner);
-                    break;
-                case 12:
-                    bitmaskDPMenu();
-                    break;
-                case 13:
-                    matrixChainMenu();
-                    break;
-                case 14:
-                    fraudRingSurveillanceMenu(scanner);
-                    break;
-                case 15:
-                    capitalBudgetingMenu(scanner);
-                    break;
-                case 16:
-                    reconciliationSubsetSumMenu(scanner);
-                    break;
-                case 17:
-                    metricTSPMenu(scanner);
-                    break;
-                case 18:
-                    millerRabinMenu(scanner);
-                    break;
-                case 19:
-                    reservoirSamplingMenu(scanner);
-                    break;
-                case 20:
-                    universalHashingMenu(scanner);
-                    break;
-                case 21:
-                    randomizedQuickSortMenu(scanner);
-                    break;
-                case 22:
-                    parallelLedgerAnalyticsMenu(scanner);
-                    break;
-                case 23:
                     System.out.println("Exiting FinServe Analytics. Goodbye!");
                     scanner.close();
                     return;
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("Invalid option. Please enter a number from 1 to 8.");
+            }
+        }
+    }
+
+    private static void module1SubMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--------------------------------------------------------------------------------");
+            System.out.println("       MODULE 1: STRING ALGORITHMS & FRAUD PATTERN DETECTION");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.println(" 1. Customer Name Search (Naive) [with limit]");
+            System.out.println(" 2. Transaction Search (KMP) [with limit]");
+            System.out.println(" 3. Fraud Pattern Detection (Aho-Corasick) [with limit]");
+            System.out.println(" 4. Repeated Transaction Pattern (Z-Function) [with limit]");
+            System.out.println(" 5. Search Financial Codes (Rabin-Karp) [with limit]");
+            System.out.println(" 6. Back to Main Menu");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.print("Select an option (1-6): ");
+
+            if (!scanner.hasNextLine()) break;
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) continue;
+
+            int choice = -1;
+            try { choice = Integer.parseInt(input); } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number (1-6).");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    naiveNameSearchMenu(scanner);
+                    break;
+                case 2:
+                    transactionSearchMenu(scanner);
+                    break;
+                case 3:
+                    fraudPatternDetectionMenu(scanner);
+                    break;
+                case 4:
+                    zFunctionMenu(scanner);
+                    break;
+                case 5:
+                    rabinKarpMenu(scanner);
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid option. Please select 1-6.");
+            }
+        }
+    }
+
+    private static void module2SubMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--------------------------------------------------------------------------------");
+            System.out.println("       MODULE 2: SUFFIX STRUCTURES & DOCUMENT INDEXING");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.println(" 1. Financial Document Search & Indexing (Suffix Array / SA-IS) [with limit]");
+            System.out.println(" 2. Transaction Pattern Analysis (LCP) [Analysis Scope Limit]");
+            System.out.println(" 3. Back to Main Menu");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.print("Select an option (1-3): ");
+
+            if (!scanner.hasNextLine()) break;
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) continue;
+
+            int choice = -1;
+            try { choice = Integer.parseInt(input); } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number (1-3).");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    suffixArrayMenu(scanner);
+                    break;
+                case 2:
+                    lcpMenu(scanner);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid option. Please select 1-3.");
+            }
+        }
+    }
+
+    private static void module3SubMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--------------------------------------------------------------------------------");
+            System.out.println("   MODULE 3: ADVANCED DYNAMIC PROGRAMMING & FINANCIAL OPTIMIZATIONS");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.println(" 1. KYC & AML Sanctions Screening (Levenshtein)");
+            System.out.println(" 2. IBAN & Account Number Transposition Detection (Damerau-Levenshtein)");
+            System.out.println(" 3. Merchant Entity Resolution (Weighted Edit Distance)");
+            System.out.println(" 4. ATM Cash Replenishment Routing (Bitmask DP - Small N)");
+            System.out.println(" 5. Optimal Multi-Currency Conversion Cost (Matrix Chain Multiplication)");
+            System.out.println(" 6. Back to Main Menu");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.print("Select an option (1-6): ");
+
+            if (!scanner.hasNextLine()) break;
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) continue;
+
+            int choice = -1;
+            try { choice = Integer.parseInt(input); } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number (1-6).");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    levenshteinMenu(scanner);
+                    break;
+                case 2:
+                    damerauLevenshteinMenu(scanner);
+                    break;
+                case 3:
+                    weightedEditDistanceMenu(scanner);
+                    break;
+                case 4:
+                    bitmaskDPMenu();
+                    break;
+                case 5:
+                    matrixChainMenu();
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid option. Please select 1-6.");
+            }
+        }
+    }
+
+    private static void module4SubMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--------------------------------------------------------------------------------");
+            System.out.println("        MODULE 4: NETWORK FLOW & INTERBANK LIQUIDITY CLEARING");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.println(" 1. Interbank Liquidity Clearing & Bottleneck Min-Cut (Edmonds-Karp) [with limit]");
+            System.out.println(" 2. RTGS Payment Clearing Engine (Dinic's Blocking Flow) [with limit]");
+            System.out.println(" 3. Loan Underwriter & Compliance Case Assignment (Bipartite Matching & Konig) [with limit]");
+            System.out.println(" 4. Cross-Border Multi-Currency Payment Routing (Min-Cost Max-Flow / SSP) [with limit]");
+            System.out.println(" 5. Strategic Fintech Product Portfolio Selection (Min-Cut Reduction) [with limit]");
+            System.out.println(" 6. Back to Main Menu");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.print("Select an option (1-6): ");
+
+            if (!scanner.hasNextLine()) break;
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) continue;
+
+            int choice = -1;
+            try { choice = Integer.parseInt(input); } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number (1-6).");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    interbankMaxFlowMenu(scanner);
+                    break;
+                case 2:
+                    dinicMaxFlowMenu(scanner);
+                    break;
+                case 3:
+                    bipartiteMatchingMenu(scanner);
+                    break;
+                case 4:
+                    minCostPaymentRoutingMenu(scanner);
+                    break;
+                case 5:
+                    fintechProjectSelectionMenu(scanner);
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid option. Please select 1-6.");
+            }
+        }
+    }
+
+    private static void module5SubMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--------------------------------------------------------------------------------");
+            System.out.println("   MODULE 5: NP-COMPLETENESS, REDUCTIONS & APPROXIMATION ALGORITHMS");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.println(" 1. Fraud Ring Surveillance (Vertex Cover 2-Approx & FPT) [with Checklist]");
+            System.out.println(" 2. Loan Capital Budgeting (Knapsack: Exact DP vs Greedy 2-Approx vs FPTAS)");
+            System.out.println(" 3. Interbank Clearing Discrepancy Reconciliation (Subset-Sum & Witness Verification)");
+            System.out.println(" 4. Metropolitan ATM Cash Logistics (Metric-TSP 2-Approximation via MST)");
+            System.out.println(" 5. Back to Main Menu");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.print("Select an option (1-5): ");
+
+            if (!scanner.hasNextLine()) break;
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) continue;
+
+            int choice = -1;
+            try { choice = Integer.parseInt(input); } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number (1-5).");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    fraudRingSurveillanceMenu(scanner);
+                    break;
+                case 2:
+                    capitalBudgetingMenu(scanner);
+                    break;
+                case 3:
+                    reconciliationSubsetSumMenu(scanner);
+                    break;
+                case 4:
+                    metricTSPMenu(scanner);
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Invalid option. Please select 1-5.");
+            }
+        }
+    }
+
+    private static void module6SubMenu(Scanner scanner) {
+        while (true) {
+            System.out.println("\n--------------------------------------------------------------------------------");
+            System.out.println("          MODULE 6: RANDOMISED AND PARALLEL ALGORITHMS");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.println(" 1. RSA / SWIFT Cryptographic Key Primality (Miller-Rabin Monte Carlo Test)");
+            System.out.println(" 2. Streaming Transaction Compliance Audit (Reservoir Sampling Algorithm R) [with limit]");
+            System.out.println(" 3. Anti-Collision Transaction Deduplication (Universal Hashing Las Vegas vs Modulo)");
+            System.out.println(" 4. High-Volume Transaction Log Sorting (Randomized QuickSort) [Analysis Scope Limit]");
+            System.out.println(" 5. Parallel Multi-Core Ledger Analytics & Running Balance Scan (ForkJoin & Blelloch Scan) [Analysis Scope Limit]");
+            System.out.println(" 6. Back to Main Menu");
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.print("Select an option (1-6): ");
+
+            if (!scanner.hasNextLine()) break;
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) continue;
+
+            int choice = -1;
+            try { choice = Integer.parseInt(input); } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number (1-6).");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    millerRabinMenu(scanner);
+                    break;
+                case 2:
+                    reservoirSamplingMenu(scanner);
+                    break;
+                case 3:
+                    universalHashingMenu(scanner);
+                    break;
+                case 4:
+                    randomizedQuickSortMenu(scanner);
+                    break;
+                case 5:
+                    parallelLedgerAnalyticsMenu(scanner);
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid option. Please select 1-6.");
             }
         }
     }
@@ -557,6 +771,293 @@ public class Main {
         int[] conversions = {100, 300, 50, 600}; 
         int cost = MatrixChain.matrixChainOrder(conversions);
         System.out.println("Minimum liquidity matching operations required: " + cost);
+    }
+
+    private static void interbankMaxFlowMenu(Scanner scanner) {
+        System.out.println("\n--- Module 4: Interbank Liquidity Clearing & Bottleneck Min-Cut (Edmonds-Karp) ---");
+        System.out.println("Theoretical Principles:");
+        System.out.println(" • Max-Flow Problem: Source (Central Bank), Sink (Clearing House), Capacities (Bilateral Credit Limits).");
+        System.out.println(" • Flow Conservation: Inflow = Outflow for all intermediary banks; Integrality Theorem guarantees integer settlement.");
+        System.out.println(" • Edmonds-Karp O(V * E^2): Shortest augmenting paths in residual graph via BFS.");
+        System.out.println(" • Max-Flow Min-Cut Dual Theorem: Maximum throughput equals the capacity of the critical bottleneck cut.");
+
+        InterbankMaxFlow net = new InterbankMaxFlow();
+        net.addCreditChannel("CentralReserve", "Bank_A (JPMorgan)", 100, "FedDiscountWindow");
+        net.addCreditChannel("CentralReserve", "Bank_B (BankOfAmerica)", 80, "RepoCreditLine");
+        net.addCreditChannel("CentralReserve", "Bank_E (Citigroup)", 90, "PrimaryDealerFacility");
+        net.addCreditChannel("Bank_A (JPMorgan)", "Bank_C (WellsFargo)", 50, "BilateralRTGS");
+        net.addCreditChannel("Bank_A (JPMorgan)", "Bank_D (GoldmanSachs)", 60, "CorrespondentLine");
+        net.addCreditChannel("Bank_B (BankOfAmerica)", "Bank_D (GoldmanSachs)", 70, "LiquiditySwap");
+        net.addCreditChannel("Bank_B (BankOfAmerica)", "Bank_F (MorganStanley)", 40, "OvernightFedFunds");
+        net.addCreditChannel("Bank_E (Citigroup)", "Bank_F (MorganStanley)", 60, "SyndicatedCredit");
+        net.addCreditChannel("Bank_C (WellsFargo)", "ClearingHouse (DTCC)", 60, "ACHSettlementLine");
+        net.addCreditChannel("Bank_D (GoldmanSachs)", "ClearingHouse (DTCC)", 90, "CHIPSSettlementLine");
+        net.addCreditChannel("Bank_F (MorganStanley)", "ClearingHouse (DTCC)", 80, "FedwireClearingLine");
+
+        InterbankMaxFlow.SettlementResult res = net.computeMaxSettlementFlow("CentralReserve", "ClearingHouse (DTCC)");
+
+        System.out.println("\n[MAXIMUM LIQUIDITY SETTLEMENT CAPACITY]:");
+        System.out.printf("Maximum Hourly Settled Volume: $%,d Million / hour\n", res.maxLiquidityFlow);
+        System.out.printf("Edmonds-Karp Execution Time:   %.3f ms [O(V * E^2)]\n", res.executionTimeNs / 1_000_000.0);
+
+        System.out.print("\nHow many interbank credit channels to view? (e.g., 5, 10, all, default 5) [with limit]: ");
+        String limitInput = scanner.nextLine().trim().toLowerCase();
+        int limit = 5;
+        if (limitInput.equals("all")) {
+            limit = res.allChannels.size();
+        } else if (!limitInput.isEmpty()) {
+            try { limit = Integer.parseInt(limitInput); } catch (NumberFormatException e) { limit = 5; }
+        }
+        int show = Math.min(limit, res.allChannels.size());
+        System.out.println("\n[UTILIZED INTERBANK CHANNELS (Showing " + show + " of " + res.allChannels.size() + ")]: ");
+        for (int i = 0; i < show; i++) {
+            System.out.println("  " + (i + 1) + ". " + res.allChannels.get(i));
+        }
+
+        System.out.println("\n[MIN-CUT DUAL ANALYSIS - SYSTEMIC RISK BOTTLENECK CHANNELS]:");
+        System.out.println("According to the Max-Flow Min-Cut Theorem, these 100% saturated credit channels form");
+        System.out.println("the systemic choke-point (Cut Capacity = Max Flow = $" + res.maxLiquidityFlow + "M):");
+        for (InterbankMaxFlow.FlowEdge cutEdge : res.minCutBottleneckChannels) {
+            System.out.println("  CRITICAL BOTTLENECK -> " + cutEdge);
+        }
+        System.out.println("Partition S (Reachable from Central Reserve): " + res.reachableBanksS);
+        System.out.println("Partition T (Clearing House Segment):         " + res.unreachableBanksT);
+        System.out.println("Actionable Policy Recommendation: Expanding credit capacity on these bottleneck channels directly increases system throughput.");
+    }
+
+    private static void dinicMaxFlowMenu(Scanner scanner) {
+        System.out.println("\n--- Module 4: High-Throughput RTGS Payment Settlement Engine (Dinic's Algorithm) ---");
+        System.out.println("Theoretical Principles:");
+        System.out.println(" • Dinic's Algorithm operates in O(V^2 * E) on general networks and O(E * sqrt(V)) on unit networks.");
+        System.out.println(" • Two Alternating Phases:");
+        System.out.println("   1. BFS constructs the Level Graph (level[v] = shortest distance from source).");
+        System.out.println("   2. DFS pushes Blocking Flows along admissible edges (level[to] == level[from] + 1).");
+        System.out.println(" • 'ptr[]' current-edge array prunes exhausted edges to prevent backtracking overhead.");
+
+        DinicMaxFlow dinic = new DinicMaxFlow(16);
+        dinic.addCorridor("CentralVault", "HubEast", 150, "Corridor-East");
+        dinic.addCorridor("CentralVault", "HubWest", 120, "Corridor-West");
+        dinic.addCorridor("CentralVault", "HubSouth", 100, "Corridor-South");
+        dinic.addCorridor("HubEast", "RegionalNorth", 90, "Corridor-EN");
+        dinic.addCorridor("HubEast", "RegionalCentral", 80, "Corridor-EC");
+        dinic.addCorridor("HubWest", "RegionalCentral", 70, "Corridor-WC");
+        dinic.addCorridor("HubWest", "RegionalSouth", 60, "Corridor-WS");
+        dinic.addCorridor("HubSouth", "RegionalSouth", 80, "Corridor-SS");
+        dinic.addCorridor("RegionalNorth", "ClearingTerminal", 110, "Corridor-NC");
+        dinic.addCorridor("RegionalCentral", "ClearingTerminal", 130, "Corridor-CC");
+        dinic.addCorridor("RegionalSouth", "ClearingTerminal", 90, "Corridor-SC");
+
+        DinicMaxFlow.DinicResult res = dinic.computeDinicMaxFlow("CentralVault", "ClearingTerminal");
+
+        System.out.println("\n[HIGH-THROUGHPUT RTGS CLEARING RESULTS]:");
+        System.out.printf("Total Real-Time Gross Settlement Flow: $%,d Million / sec\n", res.maxFlow);
+        System.out.printf("BFS Level Graph Construction Phases:   %d phases (<= V-1)\n", res.numPhases);
+        System.out.printf("Execution Time:                        %.4f ms (%s)\n", res.executionTimeNs / 1_000_000.0, res.complexity);
+
+        System.out.print("\nHow many RTGS corridors to inspect? (e.g., 5, 10, all, default 5) [with limit]: ");
+        String limitInput = scanner.nextLine().trim().toLowerCase();
+        int limit = 5;
+        if (limitInput.equals("all")) {
+            limit = 11;
+        } else if (!limitInput.isEmpty()) {
+            try { limit = Integer.parseInt(limitInput); } catch (NumberFormatException e) { limit = 5; }
+        }
+        System.out.println("\nInspecting first " + Math.min(limit, 11) + " configured clearing corridors:");
+        String[] sampleCorridors = {
+            "CentralVault -> HubEast [Corridor-East]: Cap = $150M",
+            "CentralVault -> HubWest [Corridor-West]: Cap = $120M",
+            "CentralVault -> HubSouth [Corridor-South]: Cap = $100M",
+            "HubEast -> RegionalNorth [Corridor-EN]: Cap = $90M",
+            "HubEast -> RegionalCentral [Corridor-EC]: Cap = $80M",
+            "HubWest -> RegionalCentral [Corridor-WC]: Cap = $70M",
+            "HubWest -> RegionalSouth [Corridor-WS]: Cap = $60M",
+            "HubSouth -> RegionalSouth [Corridor-SS]: Cap = $80M",
+            "RegionalNorth -> ClearingTerminal [Corridor-NC]: Cap = $110M",
+            "RegionalCentral -> ClearingTerminal [Corridor-CC]: Cap = $130M",
+            "RegionalSouth -> ClearingTerminal [Corridor-SC]: Cap = $90M"
+        };
+        for (int i = 0; i < Math.min(limit, sampleCorridors.length); i++) {
+            System.out.println("  " + (i + 1) + ". " + sampleCorridors[i]);
+        }
+        System.out.println("\nComparative Benchmark Insight:");
+        System.out.println("Edmonds-Karp performs BFS per augmenting path (up to O(V*E) augmentations = O(V*E^2)).");
+        System.out.println("Dinic's algorithm pushes entire blocking flows in each phase (at most V-1 phases = O(V^2*E)),");
+        System.out.println("making it the industry standard for high-volume banking transaction clearing.");
+    }
+
+    private static void bipartiteMatchingMenu(Scanner scanner) {
+        System.out.println("\n--- Module 4: Loan Underwriter & Compliance Case Assignment (Bipartite Matching & Konig) ---");
+        System.out.println("Theoretical Principles:");
+        System.out.println(" - Maximum Bipartite Matching reduced to Max-Flow with unit capacities.");
+        System.out.println(" - Integrality Theorem: Guarantees 0/1 integer flow solutions without fractional split cases.");
+        System.out.println(" - Konig's Theorem: In bipartite graphs, Max Matching Size = Min Vertex Cover Size.");
+        System.out.println("   The Minimum Vertex Cover identifies the staffing bottlenecks capping underwriting volume.");
+
+        List<BipartiteMatchingAssignment.Applicant> applicants = Arrays.asList(
+            new BipartiteMatchingAssignment.Applicant("APP-101", "Apex Solar Infrastructure", "GreenEnergyBond"),
+            new BipartiteMatchingAssignment.Applicant("APP-102", "BioGen Oncology Therapeutics", "CommercialCredit"),
+            new BipartiteMatchingAssignment.Applicant("APP-103", "Global Freight Logistics", "ForexHedging"),
+            new BipartiteMatchingAssignment.Applicant("APP-104", "Metropolis Commercial Towers", "RealEstateMortgage"),
+            new BipartiteMatchingAssignment.Applicant("APP-105", "Quantum AI Compute Labs", "TechVentureDebt"),
+            new BipartiteMatchingAssignment.Applicant("APP-106", "Nordic Maritime Shipping", "ForexHedging"),
+            new BipartiteMatchingAssignment.Applicant("APP-107", "Highland Wind Energy", "GreenEnergyBond"),
+            new BipartiteMatchingAssignment.Applicant("APP-108", "Apex Retail Supermarkets", "CommercialCredit")
+        );
+
+        List<BipartiteMatchingAssignment.Officer> officers = Arrays.asList(
+            new BipartiteMatchingAssignment.Officer("OFF-01", "Sarah Chen, VP Underwriting", "CommercialCredit", "ForexHedging"),
+            new BipartiteMatchingAssignment.Officer("OFF-02", "David Miller, Senior Analyst", "GreenEnergyBond"),
+            new BipartiteMatchingAssignment.Officer("OFF-03", "Elena Rossi, Credit Director", "CommercialCredit", "TechVentureDebt"),
+            new BipartiteMatchingAssignment.Officer("OFF-04", "Marcus Vance, Mortgage Lead", "RealEstateMortgage"),
+            new BipartiteMatchingAssignment.Officer("OFF-05", "Amina Patel, Energy Specialist", "GreenEnergyBond"),
+            new BipartiteMatchingAssignment.Officer("OFF-06", "Lucas Wright, FX Risk Officer", "ForexHedging")
+        );
+
+        BipartiteMatchingAssignment.MatchingResult res = BipartiteMatchingAssignment.solveUnderwritingAssignment(applicants, officers);
+
+        System.out.println("\n[UNDERWRITING ASSIGNMENT RESULTS]:");
+        System.out.printf("Total Loan Applicants:         %d cases\n", res.totalApplicants);
+        System.out.printf("Available Certified Officers:   %d underwriters\n", res.totalOfficers);
+        System.out.printf("Optimal Matches Made:          %d cases successfully paired\n", res.totalAssigned);
+        System.out.printf("Matching Efficiency:           %.1f%%\n", (res.totalAssigned * 100.0) / res.totalApplicants);
+
+        System.out.print("\nHow many underwriting assignments to view? (e.g., 5, 10, all, default all) [with limit]: ");
+        String limitInput = scanner.nextLine().trim().toLowerCase();
+        int limit = res.assignments.size();
+        if (!limitInput.equals("all") && !limitInput.isEmpty()) {
+            try { limit = Integer.parseInt(limitInput); } catch (NumberFormatException e) { limit = res.assignments.size(); }
+        }
+        int show = Math.min(limit, res.assignments.size());
+        System.out.println("\n[UNDERWRITER <-> APPLICANT ASSIGNMENTS (Showing " + show + " of " + res.assignments.size() + ")]: ");
+        for (int i = 0; i < show; i++) {
+            System.out.println("  " + (i + 1) + ". " + res.assignments.get(i));
+        }
+
+        if (!res.unassignedApplicants.isEmpty()) {
+            System.out.println("\n[UNASSIGNED APPLICANTS (Backlogged due to Staffing Constraints)]:");
+            for (String un : res.unassignedApplicants) {
+                System.out.println("  * " + un);
+            }
+        }
+
+        System.out.println("\n[KONIG'S THEOREM BOTTLENECK ANALYSIS]:");
+        System.out.println("Minimum Vertex Cover Size: " + res.minVertexCoverBottlenecks.size() + " (Exactly matches max assignment size = " + res.totalAssigned + ")");
+        System.out.println("The following personnel/cases form the dual bottleneck:");
+        for (String b : res.minVertexCoverBottlenecks) {
+            System.out.println("  -> " + b);
+        }
+        System.out.println("Management Takeaway: Hiring underwriters matching the bottleneck specializations directly increases loan origination revenue.");
+    }
+
+    private static void minCostPaymentRoutingMenu(Scanner scanner) {
+        System.out.println("\n--- Module 4: Cross-Border Multi-Currency Payment Routing (Min-Cost Max-Flow / SSP) ---");
+        System.out.println("Theoretical Principles:");
+        System.out.println(" • Min-Cost Max-Flow (MCMF): Finds flow of desired volume F that minimizes total transaction cost ∑ c(e)*f(e).");
+        System.out.println(" • Successive Shortest Path (SSP): Augments flow along minimum-cost paths in residual network via SPFA.");
+        System.out.println(" • Cycle-Cancelling Intuition: A flow is optimal iff residual graph contains NO negative-cost cycles.");
+
+        MinCostPaymentRouting router = new MinCostPaymentRouting(12);
+        // Interbank corridors: from, to, capacity ($M), fee per $1M ($K), corridor description
+        router.addCorridor("NewYork_Fed", "London_Hub", 60, 2.50, "USD_GBP_Primary");
+        router.addCorridor("NewYork_Fed", "Frankfurt_Hub", 40, 1.80, "USD_EUR_Direct");
+        router.addCorridor("NewYork_Fed", "Zurich_Hub", 30, 2.10, "USD_CHF_Corridor");
+        router.addCorridor("London_Hub", "Tokyo_BOJ", 50, 4.00, "GBP_JPY_DeepLiquidity");
+        router.addCorridor("Frankfurt_Hub", "Tokyo_BOJ", 30, 3.20, "EUR_JPY_DirectChannel");
+        router.addCorridor("Zurich_Hub", "Singapore_MAS", 35, 2.80, "CHF_SGD_Settlement");
+        router.addCorridor("Frankfurt_Hub", "London_Hub", 25, 0.50, "Inter-European_Relay");
+        router.addCorridor("Singapore_MAS", "Tokyo_BOJ", 40, 1.50, "SGD_JPY_AsiaPacificRail");
+
+        System.out.print("Enter target liquidity to transfer from NewYork to Tokyo in $M (e.g. 70, 90, default 70): ");
+        String amtInput = scanner.nextLine().trim();
+        int targetTransfer = 70;
+        if (!amtInput.isEmpty()) {
+            try { targetTransfer = Integer.parseInt(amtInput); } catch (Exception ignored) {}
+        }
+
+        MinCostPaymentRouting.RoutingPlan plan = router.routeOptimalPayment("NewYork_Fed", "Tokyo_BOJ", targetTransfer);
+
+        System.out.println("\n[OPTIMAL ROUTING PLAN (SSP ALGORITHM RESULT)]:");
+        System.out.printf("Liquidity Successfully Routed: $%,d Million (Target: $%,d Million)\n", plan.totalLiquidityRouted, targetTransfer);
+        System.out.printf("Total Cumulative Wire Fees:     $%,.2f Thousand USD\n", plan.totalFeesPaid);
+        if (plan.totalLiquidityRouted > 0) {
+            System.out.printf("Average Blended Routing Cost:   $%,.3f Thousand per $1 Million transferred\n", plan.totalFeesPaid / plan.totalLiquidityRouted);
+        }
+        System.out.printf("MCMF Optimization Run Time:     %.3f ms\n", plan.executionTimeNs / 1_000_000.0);
+
+        System.out.print("\nHow many active payment channels to view? (e.g., 5, 10, all, default all) [with limit]: ");
+        String limitInput = scanner.nextLine().trim().toLowerCase();
+        int limit = plan.activeCorridors.size();
+        if (!limitInput.equals("all") && !limitInput.isEmpty()) {
+            try { limit = Integer.parseInt(limitInput); } catch (NumberFormatException e) { limit = plan.activeCorridors.size(); }
+        }
+        int show = Math.min(limit, plan.activeCorridors.size());
+        System.out.println("\n[DISPATCHED PAYMENT CORRIDORS (Showing " + show + " of " + plan.activeCorridors.size() + ")]: ");
+        for (int i = 0; i < show; i++) {
+            System.out.println("  " + (i + 1) + ". " + plan.activeCorridors.get(i));
+        }
+        System.out.println("\nCost Minimization Insight:");
+        System.out.println("By routing cheaper sub-paths first (e.g., via Frankfurt & Singapore relays),");
+        System.out.println("the bank avoids congested expensive direct corridors, saving substantial treasury capital.");
+    }
+
+    private static void fintechProjectSelectionMenu(Scanner scanner) {
+        System.out.println("\n--- Module 4: Strategic Fintech Product Portfolio Selection (Min-Cut Reduction) ---");
+        System.out.println("Theoretical Principles:");
+        System.out.println(" • Project Selection as Min-Cut: Selecting a set of projects with dependencies is a closure problem.");
+        System.out.println(" - Construction: Source -> Products with capacity = revenue; Dependencies have capacity = INF;");
+        System.out.println("   Infrastructure -> Sink with capacity = cost.");
+        System.out.println(" • Dual Optimality: Max Net Profit = (Total Potential Revenue) - Capacity(Min-Cut).");
+        System.out.println("   Infinite capacity ensures prerequisite infrastructure dependencies can NEVER be severed.");
+
+        List<FintechProjectSelection.InfrastructureModule> infra = Arrays.asList(
+            new FintechProjectSelection.InfrastructureModule("INF-1", "Cloud Core Banking Modernization", 120),
+            new FintechProjectSelection.InfrastructureModule("INF-2", "Real-Time AML & Sanctions Streaming Pipeline", 80),
+            new FintechProjectSelection.InfrastructureModule("INF-3", "HSM Dedicated Hardware Security Crypto Vault", 160),
+            new FintechProjectSelection.InfrastructureModule("INF-4", "ISO 20022 High-Speed Messaging Bus", 60),
+            new FintechProjectSelection.InfrastructureModule("INF-5", "Distributed Open Banking API Gateway", 90)
+        );
+
+        List<FintechProjectSelection.RevenueProduct> prods = Arrays.asList(
+            new FintechProjectSelection.RevenueProduct("PRD-1", "Instant Cross-Border Payments App", 200, "INF-1", "INF-2", "INF-4"),
+            new FintechProjectSelection.RevenueProduct("PRD-2", "AI Robo-Advisor Wealth Engine", 150, "INF-1", "INF-5"),
+            new FintechProjectSelection.RevenueProduct("PRD-3", "Institutional Crypto Custody", 90, "INF-3"), // Requires 160K infra, earns 90K -> Negative ROI!
+            new FintechProjectSelection.RevenueProduct("PRD-4", "High-Frequency FX Algorithmic Hedging", 130, "INF-2", "INF-4"),
+            new FintechProjectSelection.RevenueProduct("PRD-5", "SME Embedded Finance Micro-Lending", 170, "INF-1", "INF-5"),
+            new FintechProjectSelection.RevenueProduct("PRD-6", "Biometric Mobile Banking Suite", 110, "INF-5")
+        );
+
+        FintechProjectSelection.PortfolioDecision decision = FintechProjectSelection.optimizeFintechPortfolio(prods, infra);
+
+        System.out.println("\n[FINTECH PORTFOLIO OPTIMIZATION VIA S-T MIN-CUT]:");
+        System.out.printf("Total Potential Gross Revenue:   $%,d Thousand\n", decision.totalPotentialRevenue);
+        System.out.printf("Minimum Cut Penalty (Cost/Loss): $%,d Thousand\n", decision.minCutCost);
+        System.out.printf("MAXIMUM GUARANTEED NET PROFIT:   $%,d Thousand\n", decision.maxNetProfit);
+        System.out.printf("Min-Cut Computation Time:        %.3f ms\n", decision.executionTimeNs / 1_000_000.0);
+
+        System.out.print("\nHow many approved products to view? (e.g., 3, all, default all) [with limit]: ");
+        String limitInput = scanner.nextLine().trim().toLowerCase();
+        int limit = decision.selectedProducts.size();
+        if (!limitInput.equals("all") && !limitInput.isEmpty()) {
+            try { limit = Integer.parseInt(limitInput); } catch (NumberFormatException e) { limit = decision.selectedProducts.size(); }
+        }
+        int show = Math.min(limit, decision.selectedProducts.size());
+        System.out.println("\n[APPROVED REVENUE PRODUCTS (Showing " + show + " of " + decision.selectedProducts.size() + ")]: ");
+        for (int i = 0; i < show; i++) {
+            FintechProjectSelection.RevenueProduct p = decision.selectedProducts.get(i);
+            System.out.println("  " + (i + 1) + ". " + p.name + " [ID: " + p.id + "] -> Projected Revenue: +$" + p.expectedRevenue + "K");
+        }
+
+        System.out.println("\n[SHARED PREREQUISITE INFRASTRUCTURE FUNDED]:");
+        for (FintechProjectSelection.InfrastructureModule m : decision.fundedInfrastructure) {
+            System.out.println("  * " + m.name + " [ID: " + m.id + "] -> Capital Cost: -$" + m.capitalCost + "K");
+        }
+
+        System.out.println("\n[REJECTED PRODUCTS (Prerequisite Cost Exceeds Expected Gain)]:");
+        for (FintechProjectSelection.RevenueProduct p : decision.rejectedProducts) {
+            System.out.println("  * " + p.name + " [ID: " + p.id + "] -> Requires $" + p.expectedRevenue + "K vs dependencies. Avoided negative ROI!");
+        }
+        System.out.println("\nReduction Insight: Shared infrastructure costs are amortized across all selected products.");
+        System.out.println("Min-Cut guarantees 100% mathematically optimal capital allocation in polynomial time.");
     }
 
     private static void fraudRingSurveillanceMenu(Scanner scanner) {
